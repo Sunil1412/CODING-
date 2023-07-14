@@ -68,6 +68,8 @@ borrowdate date);
 
 
 SQL> select * from branch;
+
+
 BRANCHID BNAME HOD
 ---------- ---------- ----------
 1 mca npk
@@ -75,6 +77,8 @@ BRANCHID BNAME HOD
 3 cse gtr
 4 ise sudhamani
 5 electrical sumathi
+
+
 SQL> select * from student;
 USN NAME ADDR BRANCHID SEM
 ---------- ---------- --------------- ---------- ----------
@@ -83,7 +87,8 @@ USN NAME ADDR BRANCHID SEM
 1rn3 kiran delhi 3 6
 1rn4 mahi chennai 4 7
 1rn5 krishna hubli 5 4
-Nagesh B S, Asst. Prof., Dept. of MCA, RNSIT, Bengaluru phone:9844032238
+
+
 SQL> select * from book;
 BOOKID BNAME AUTHORID PUBLISHER BRANCHID
 ---------- ---------- ---------- ---------- ----------
@@ -92,6 +97,9 @@ BOOKID BNAME AUTHORID PUBLISHER BRANCHID
 3333 oops 125 sapna 3
 4444 unix 126 subhash 4
 5555 cprog 127 pearson 5
+
+
+
 SQL> select * from author;
 AUTHORID ANAME COUNTRY AGE
 ---------- ---------- ---------- ----------
@@ -100,6 +108,8 @@ AUTHORID ANAME COUNTRY AGE
 125 RAMKRISHNA india 55
 126 sumitabha india 38
 127 dennis usa 66
+
+
 SQL> select * from borrow;
 USN BOOKID BORROWDAT
 ---------- ---------- ---------
@@ -108,28 +118,43 @@ USN BOOKID BORROWDAT
 1rn3 5555 01-JUN-10
 1rn5 2222 19-MAY-00
 1rn2 1111 22-FEB-15
+
+
+
 Query 1.
 select * from student where sem=2 and branchid in
 (select branchid from branch where bname='mca')
 USN NAME ADDR BRANCHID SEM
 ---------- ---------- --------------- ---------- ----------
 1rn1 harish bangalore 1 2
+
+
+
 Query 2.
 select * from student where usn not in (select usn from borrow);
 USN NAME ADDR BRANCHID SEM
 ---------- ---------- --------------- ---------- ----------
 1rn4 mahi chennai 4 7
+
+
+
+
 Query 3.
 select student.usn ,student.name,branch.bname, book.bname, aname,
 borrowdate from student , branch, book, author, borrow where
 student.usn=borrow.usn and borrow.bookid=book.bookid and
 book.authorid =author.authorid and student.branchid=branch.branchid
 and student.sem=2 and branch.bname='mca';
-Nagesh B S, Asst. Prof., Dept. of MCA, RNSIT, Bengaluru phone:9844032238
+
+
+
 USN NAME BNAME BNAME ANAME BORROWDAT
 ---------- ---------- ---------- ---------- ---------- ---------
 1rn1 harish mca dbms ritche 10-JAN-00
 1rn1 harish mca oops RAMKRISHNA 05-MAR-16
+
+
+
 Query 4.
 select count(*) , authorid from book group by authorid;
 COUNT(*) AUTHORID
@@ -139,12 +164,18 @@ COUNT(*) AUTHORID
 1 124
 1 126
 1 127
+
+
+
 Query 5.
 select * from student where usn in ( select usn from borrow group
 by usn having count(usn) >=2);
 USN NAME ADDR BRANCHID SEM
 ---------- ---------- --------------- ---------- ----------
 1rn1 harish bangalore 1 2
+
+
+
 Query 6.
 select * from student s where exists (select br.usn from borrow br
 join book bk on br.bookid=bk.bookid where br.usn=s.usn group by usn
@@ -152,6 +183,8 @@ having count(distinct authorid)>1);
 USN NAME ADDR BRANCHID SEM
 ---------- ---------- --------------- ---------- ----------
 1rn1 harish bangalore 1 2
+
+
 Query 7.
 select bname from book order by bname desc;
 BNAME
@@ -161,6 +194,9 @@ oops
 dbms
 cprog
 c prog
+
+
+
 Query 8.
 select * from student s where exists (select usn , publisher from
 borrow join book on borrow.bookid=book.bookid where s.usn=borrow.usn
